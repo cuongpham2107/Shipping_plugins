@@ -29,74 +29,14 @@ Domain Path:       /languages
 //     echo'Hey, you cant access this file, you silly human!';
 //     exit;
 // }
-
-
-class Shipping_Plugin
+if(file_exists(dirname(__FILE__).'/vendor/autoload.php'))
 {
-    public function __construct()
-    {
-        add_action('init', array($this,'custom_shipping_type'));
-    }
-    public function register()
-    {
-        //admin_enqueue_scripts => backend
-        //admin_enqueue_scripts => frontend
-        add_action('admin_enqueue_scripts', array($this,'enqueue'));
-    }
-    //activate
-    public function activate()
-    {
-       //generated a CPT
-        $this->custom_shipping_type();
-       //flush rewrite rules
-       flush_rewrite_rules();
-    }
-
-    //deactivate
-    public function deactivate()
-    {
-        //flush rewrite rules
-        flush_rewrite_rules();
-    }
-
-    //uninstall
-    public function uninstall()
-    {
-        //delete CPT
-        //delete add the plugin data from the DB   
-    }
-    public function custom_shipping_type()
-    {
-        register_post_type('shipping',['public'=>true, 'label'=>'Shipping']);
-    }
-    public function enqueue()
-    {
-        //enqueue all our scripts
-
-        wp_enqueue_style('mypluginstyle',plugins_url('/assets/main.css',__FILE__));
-        wp_enqueue_script('mypluginscript',plugins_url('/assets/main.js',__FILE__));
-    }
-}
-if(class_exists('Shipping_Plugin'))
-{
-    $shipping = new Shipping_Plugin('Shipping Plugin initialized!');
-    $shipping->register();
+    require_once dirname(__FILE__).'/vendor/autoload.php';
 }
 
-//activate
-register_activation_hook(__FILE__, array($shipping,'activate'));
+define('PLUGIN_PATH',plugin_dir_path(__FILE__));
+define('PLUGIN_URL', plugin_dir_url(__FILE__));
 
-
-//deactivate
-register_deactivation_hook(__FILE__,array($shipping, 'deactivate'));
-
-
-//uninstall
-register_uninstall_hook(__FILE__,$shipping,'uninstall');
-
-
-// function customFunction($arg)
-// {
-//     echo $arg;
-// }
-// customFunction('this í my argument to echo');
+if(class_exists('Inc\\Init')){
+    Inc\Init::register_servives();
+}

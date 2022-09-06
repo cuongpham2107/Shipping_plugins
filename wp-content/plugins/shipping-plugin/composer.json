@@ -1,0 +1,22 @@
+{
+    "name": "cuong/shipping-plugin",
+    "description": "Shipping cart plugin",
+    "type": "project",
+    "license": "GPL",
+    "autoload": {
+        "psr-4": {
+            "Cuong\\ShippingPlugin\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "cuongpham2107",
+            "email": "cuongpham2107@gmail.com"
+        }
+    ],
+    "minimum-stability": "dev",
+    "require": {},
+    "autoload":{
+        "psr-4": {"Inc\\":"./includes"}
+    }
+}
