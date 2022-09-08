@@ -9,7 +9,7 @@ use \Inc\Api\Callbacks\AdminCallbacks;
 
 class Admin extends BaseController
 {
-    public $settings;
+    public $settings ;
 
     public $callbacks;
 
@@ -21,6 +21,7 @@ class Admin extends BaseController
     public function register()
     {
         // add_action('admin_menu',array($this, 'add_admin_pages'));
+      
         $this->settings = new SettingsApi();
 
         $this->callbacks = new AdminCallbacks();
@@ -31,9 +32,12 @@ class Admin extends BaseController
         
         $this->settings->AddPages( $this->pages)->WithSubPage('Dashboard')->AddSubMenuPages($this->subpages)->register();
 
-        $this->setSettings();
-        $this->setSections();
-        $this->setFields();
+        add_action('admin_init', array($this, 'setSetting'));
+
+        add_action('admin_init', array($this, 'setSection'));
+
+        add_action('admin_init', array($this, 'setField'));
+
     }
     public function setPages()
     {
@@ -64,17 +68,31 @@ class Admin extends BaseController
             ),
         );
     }
-    public function setSettings()
+    public function setSetting()
     {
         $args = array(
             array(
-                'option_group'      => 'shipping_options_group',
-                'option_name'       => 'text-example',
+                'option_group'      => 'alecaddd_options_group',
+                'option_name'       => 'text_example',
                 'callback'          => array($this->callbacks,'ShippingOptionGroup'),
+            ),
+            array(
+                'option_group'      => 'alecaddd_options_group',
+                'option_name'       => 'first_name',
             )
-        );$this->settings->setSettings($args);
+        );
+        foreach($args as $setting)
+        {
+          
+            register_setting(
+                $setting["option_group"], 
+                $setting["option_name"], 
+                (isset($setting["callback"]) ? $setting["callback"] : '')
+            );
+        }
+
     }
-    public function setSections()
+    public function setSection()
     {
         $args = array(
             array(
@@ -84,9 +102,20 @@ class Admin extends BaseController
                 'page'      => 'shipping_plugin',
             )
         );
-        $this->settings->setSections($args);
+        //add settings section
+        foreach($args as $section)
+        {
+            add_settings_section(
+                $section["id"], 
+                $section["title"],
+                (isset($section["callback"]) ? $section["callback"] : ''),
+                $section["page"],
+            );
+        }
+
+       
     }
-    public function setFields()
+    public function setField()
     {
         $args = array(
             array(
@@ -100,9 +129,34 @@ class Admin extends BaseController
                     'class'     => 'example-class',
 
                 )
-            )
+                ),
+                array(
+                    'id'        => 'first_name',
+                    'title'     => 'First Name',
+                    'callback'  => array($this->callbacks,'ShippingFirstName'),
+                    'page'      => 'shipping_plugin',
+                    'section'   => 'shipping_admin_index',
+                    'args'      => array(
+                        'label_for' => 'first_name',
+                        'class'     => 'example-class',
+    
+                    )
+                )
         );
-        $this->settings->setSections($args);
+        
+         //add settings field
+         foreach($args as $field)
+         {
+             add_settings_field(
+                 $field["id"],
+                 $field["title"],
+                 (isset($field["callback"]) ? $field["callback"] : ''),
+                 $field["page"],
+                 $field["section"],
+                 (isset($field["args"]) ? $field["args"] : ''),
+             );
+         }
+        
     }
 
     public function shipping_plugin_index()

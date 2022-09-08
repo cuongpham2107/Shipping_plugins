@@ -6,13 +6,12 @@
 
 namespace Inc\Api\Callbacks;
 
-use Inc\Base\BaseController;
 
-class AdminCallbacks extends BaseController
+class AdminCallbacks 
 {
     public function AdminDashboard()
     {
-        return require_once( "$this->plugin_path/templates/admin.php" );
+        return require_once(PLUGIN_PATH. "/templates/admin.php" );
     }
     public function ShippingOptionGroup($input)
     {
@@ -24,7 +23,11 @@ class AdminCallbacks extends BaseController
     }
     public function ShippingTextExample()
     {
-        $value = esc_attr(get_option('text_example'));
-        echo'<input type="text" class="regular-text" name="text_example" value="'.  $value  .'" placeholder="Wirte SomeThing Here!">';
+        $value = esc_attr(get_option('last_name'));
+        echo'<input type="text" class="regular-text" name="last_name" value="'.  $value  .'" placeholder="Wirte SomeThing Here!">';
+    }
+    public function ShippingFirstName(){
+        $value = esc_attr(get_option('first_name'));
+        echo'<input type="text" class="regular-text" name="first_name" value="'.  $value  .'" placeholder="Wirte Your First Name Here!">';
     }
 }
