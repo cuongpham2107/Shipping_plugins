@@ -19,7 +19,7 @@ class AdminCallbacks
     }
     public function ShippingAdminSection()
     {
-        echo"Check this section!";
+        // echo"Check this section!";
     }
     public function ShippingTextExample()
     {
@@ -29,5 +29,10 @@ class AdminCallbacks
     public function ShippingFirstName(){
         $value = esc_attr(get_option('first_name'));
         echo'<input type="text" class="regular-text" name="first_name" value="'.  $value  .'" placeholder="Wirte Your First Name Here!">';
+    }
+    public function ShippingSDT()
+    {
+        $value = esc_attr(get_option('so_dien_thoai'));
+        echo'<input type="number" class="regular-text" name="so_dien_thoai" value="'.  $value  .'" placeholder="Điền số điện thoại">';
     }
 }

@@ -67,6 +67,7 @@
 
        return $this;
     }
+    
     public function AddAdminMenu()
     {
         foreach ($this->admin_pages as $key => $page) {
